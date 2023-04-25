@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create file metadata table
+      author: Maciej Małecki
+      changes:
+        - createTable:
+            tableName: file_descriptor
+            schemaName: ${db-schema-name}
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: storage_path
+                  type: text
+                  constraints:
+                    nullable: true
+              - column:
+                  name: file_name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: content_type
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+      rollback:
+        - sql:
+            sql: drop table file_descriptor;

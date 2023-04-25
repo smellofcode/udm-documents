@@ -21,3 +21,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+package com.udm.documents.filestore.domain;
+
+import java.util.Objects;
+import lombok.AllArgsConstructor;
+import org.mockito.ArgumentMatcher;
+
+@AllArgsConstructor
+public class FileDescriptorMatcher implements ArgumentMatcher<FileDescriptor> {
+
+    private final FileDescriptor expected;
+
+    @Override
+    public boolean matches(FileDescriptor argument) {
+        return Objects.equals(argument.getFileName(), expected.getFileName())
+                && Objects.equals(argument.getStatus(), expected.getStatus())
+                && Objects.equals(argument.getStoragePath(), expected.getStoragePath())
+                && Objects.equals(argument.getContentType(), expected.getContentType());
+    }
+}

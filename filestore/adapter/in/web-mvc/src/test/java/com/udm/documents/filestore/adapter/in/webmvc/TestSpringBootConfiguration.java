@@ -21,3 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+package com.udm.documents.filestore.adapter.in.webmvc;
+
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootApplication(scanBasePackages = {TestSpringBootConfiguration.BASE_PACKAGE})
+public class TestSpringBootConfiguration {
+    public static final String BASE_PACKAGE = "com.udm.documents.filestore";
+}

@@ -1,0 +1,38 @@
+logging:
+  level:
+    org.springframework: INFO
+
+udm:
+  documents:
+    filestore:
+      uploadPath: ${DOCUMENTS_UPLOADS_DIR}
+
+spring:
+  jpa:
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.default_schema: ${DOCUMENTS_DB_SCHEMA_NAME}
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+    url: ${DOCUMENTS_DB_URL}?currentSchema=${DOCUMENTS_DB_SCHEMA_NAME}
+    username: ${DOCUMENTS_DB_USER}
+    password: ${DOCUMENTS_DB_PW}
+    driverClassName: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/root.yaml
+    parameters:
+      db-schema-name: ${DOCUMENTS_DB_SCHEMA_NAME}
+    enabled: true
+    label-filter: "!test-data"
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

@@ -21,3 +21,42 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+package com.udm.documents.filestore.domain;
+
+import java.util.UUID;
+import lombok.*;
+
+@Getter
+@AllArgsConstructor
+@Builder(access = AccessLevel.PACKAGE)
+@ToString
+public class FileDescriptor {
+    private UUID id;
+
+    private String fileName;
+    private FileStatus status;
+    private String storagePath;
+
+    private String contentType;
+
+    public static FileDescriptor create(String fileName, String contentType) {
+        return FileDescriptor.builder()
+                .id(UUID.randomUUID())
+                .status(FileStatus.UPLOADING)
+                .fileName(fileName)
+                .contentType(contentType)
+                .build();
+    }
+
+    public void confirmUploaded(String storagePath) {
+        if (status != FileStatus.UPLOADING) {
+            throw new IllegalStateException();
+        }
+        this.status = FileStatus.UPLOADED;
+        this.storagePath = storagePath;
+    }
+
+    public boolean canBeDownloaded() {
+        return status != FileStatus.UPLOADING;
+    }
+}
