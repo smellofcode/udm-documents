@@ -120,8 +120,8 @@ class DocumentControllerTest {
                         ]
                         """
                                         .formatted(
-                                                resources.get(0).getId().toString(),
-                                                resources.get(1).getId().toString(),
-                                                resources.get(2).getId().toString())));
+                                                resources.get(0).id().toString(),
+                                                resources.get(1).id().toString(),
+                                                resources.get(2).id().toString())));
     }
 }

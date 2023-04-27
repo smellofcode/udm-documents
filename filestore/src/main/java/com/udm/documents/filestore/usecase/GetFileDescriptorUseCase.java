@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package com.udm.documents.filestore.usecase;
 
-import com.udm.documents.filestore.domain.FileDescriptor;
+import com.udm.documents.filestore.domain.FileDescriptorView;
 import com.udm.documents.filestore.usecase.port.FindFileDescriptorPort;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,8 +36,8 @@ public class GetFileDescriptorUseCase {
 
     private final FindFileDescriptorPort findFileDescriptorPort;
 
-    public Optional<FileDescriptor> apply(GetFileDescriptorQuery query) {
-        return findFileDescriptorPort.findById(query.id());
+    public Optional<FileDescriptorView> apply(GetFileDescriptorQuery query) {
+        return findFileDescriptorPort.findById(query.id()).map(FileDescriptorView::from);
     }
 
     public record GetFileDescriptorQuery(UUID id) {}

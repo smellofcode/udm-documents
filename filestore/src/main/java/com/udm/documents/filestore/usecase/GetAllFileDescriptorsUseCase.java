@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package com.udm.documents.filestore.usecase;
 
-import com.udm.documents.filestore.domain.FileDescriptor;
+import com.udm.documents.filestore.domain.FileDescriptorView;
 import com.udm.documents.filestore.usecase.port.FindAllFileDescriptorsPort;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -35,8 +35,10 @@ public class GetAllFileDescriptorsUseCase {
 
     private final FindAllFileDescriptorsPort findAllFileDescriptorsPort;
 
-    public List<FileDescriptor> apply(GetAllFileDescriptorsQuery query) {
-        return findAllFileDescriptorsPort.findAll(query.limit(), query.offset());
+    public List<FileDescriptorView> apply(GetAllFileDescriptorsQuery query) {
+        return findAllFileDescriptorsPort.findAll(query.limit(), query.offset()).stream()
+                .map(FileDescriptorView::from)
+                .toList();
     }
 
     public record GetAllFileDescriptorsQuery(int limit, int offset) {}

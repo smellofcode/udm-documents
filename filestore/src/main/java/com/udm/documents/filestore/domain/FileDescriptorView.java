@@ -21,25 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.filestore.adapter.in.webmvc;
+package com.udm.documents.filestore.domain;
 
-import com.udm.documents.filestore.adapters.in.web.mvc.generated.api.model.DocumentResource;
-import com.udm.documents.filestore.domain.FileDescriptorView;
 import java.util.UUID;
 
-class TestDataFactory {
-
-    private TestDataFactory() {}
-
-    static FileDescriptorView createFileDescriptor(String name, String contentType) {
-        return new FileDescriptorView(UUID.randomUUID(), name, contentType);
-    }
-
-    static DocumentResource createDocumentResource(String name, String contentType) {
-        var resource = new DocumentResource();
-        resource.setId(UUID.randomUUID().toString());
-        resource.setName(name);
-        resource.setContentType(contentType);
-        return resource;
+public record FileDescriptorView(UUID id, String fileName, String contentType) {
+    public static FileDescriptorView from(FileDescriptor fileDescriptor) {
+        return new FileDescriptorView(
+                fileDescriptor.getId(), fileDescriptor.getFileName(), fileDescriptor.getContentType());
     }
 }

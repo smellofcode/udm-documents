@@ -25,7 +25,7 @@ package com.udm.documents.filestore.adapter.in.webmvc;
 
 import com.udm.documents.filestore.adapters.in.web.mvc.generated.api.DocumentsResourceApi;
 import com.udm.documents.filestore.adapters.in.web.mvc.generated.api.model.DocumentResource;
-import com.udm.documents.filestore.domain.FileDescriptor;
+import com.udm.documents.filestore.domain.FileDescriptorView;
 import com.udm.documents.filestore.usecase.DownloadFileUseCase;
 import com.udm.documents.filestore.usecase.GetAllFileDescriptorsUseCase;
 import com.udm.documents.filestore.usecase.GetFileDescriptorUseCase;
@@ -101,11 +101,11 @@ class DocumentController implements DocumentsResourceApi {
                 .map(DocumentController::toResource));
     }
 
-    private static DocumentResource toResource(FileDescriptor descriptor) {
+    private static DocumentResource toResource(FileDescriptorView descriptor) {
         final var result = new DocumentResource();
-        result.setId(descriptor.getId().toString());
-        result.setName(descriptor.getFileName());
-        result.setContentType(descriptor.getContentType());
+        result.setId(descriptor.id().toString());
+        result.setName(descriptor.fileName());
+        result.setContentType(descriptor.contentType());
         return result;
     }
 }
