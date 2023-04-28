@@ -24,6 +24,7 @@ SOFTWARE.
 package com.udm.documents.filestore.adapter.out.db.jdbi;
 
 import com.udm.documents.filestore.domain.FileDescriptor;
+import com.udm.documents.filestore.domain.FileStatus;
 import com.udm.documents.filestore.usecase.port.FindAllFileDescriptorsPort;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -43,8 +44,10 @@ public class FindAllFileDescriptorsAdapter implements FindAllFileDescriptorsPort
                         """
                             SELECT id, storage_path, status, file_name, content_type
                             FROM file_descriptor
+                            WHERE status <> :wrongStatus
                             LIMIT :limit OFFSET :offset
                             """)
+                .bind("wrongStatus", FileStatus.UPLOADING)
                 .bind("limit", limit)
                 .bind("offset", offset)
                 .registerRowMapper(ConstructorMapper.factory(FileDescriptor.class))

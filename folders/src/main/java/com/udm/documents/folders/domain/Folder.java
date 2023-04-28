@@ -21,6 +21,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.filestore.domain;
+package com.udm.documents.folders.domain;
 
-public class IllegalStateException extends RuntimeException {}
+import java.util.UUID;
+import lombok.NonNull;
+
+public record Folder(UUID id, String name, UUID parentId) {
+
+    public Folder withNewParent(UUID parentId) {
+        return new Folder(id, name, parentId);
+    }
+
+    public Folder withNewName(@NonNull String name) {
+        if (!name.equals(this.name)) {
+            return new Folder(id, name, parentId);
+        } else {
+            return this;
+        }
+    }
+
+    public static Folder create(String name) {
+        return new Folder(UUID.randomUUID(), name, null);
+    }
+}

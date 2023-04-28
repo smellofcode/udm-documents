@@ -22,6 +22,8 @@ dependencies {
     implementation(project(":filestore:adapter:out:db-jdbi"))
     implementation(project(":filestore:adapter:out:file"))
 
+    implementation(project(":folders"))
+
     //Spring boot bundles
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.security:spring-security-config")

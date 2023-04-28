@@ -8,4 +8,5 @@ dependencies {
     testImplementation(project(":filestore:adapter:in:web-mvc"))
     testImplementation(project(":filestore:adapter:out:db-jdbi"))
     testImplementation(project(":filestore:adapter:out:file"))
+    testImplementation(project(":folders"))
 }

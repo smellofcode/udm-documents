@@ -21,28 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.filestore.usecase;
+package com.udm.documents.folders.usecase.port;
 
-import com.udm.documents.filestore.domain.FileDescriptor;
-import com.udm.documents.filestore.domain.FileDescriptorView;
-import com.udm.documents.filestore.usecase.port.FindFileDescriptorPort;
-import java.util.Optional;
+import com.udm.documents.folders.domain.Folder;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
-@AllArgsConstructor
-public class GetFileDescriptorUseCase {
-
-    private final FindFileDescriptorPort findFileDescriptorPort;
-
-    public Optional<FileDescriptorView> apply(GetFileDescriptorQuery query) {
-        return findFileDescriptorPort
-                .findById(query.id())
-                .filter(FileDescriptor::canBeDownloaded)
-                .map(FileDescriptorView::from);
-    }
-
-    public record GetFileDescriptorQuery(UUID id) {}
+public interface CreateFolderPort {
+    UUID create(Folder folder);
 }

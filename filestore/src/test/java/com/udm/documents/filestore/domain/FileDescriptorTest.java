@@ -85,7 +85,7 @@ class FileDescriptorTest {
         String storagePath = "path/to/storage";
 
         // When & Then
-        assertThrows(IllegalStateException.class, () -> fileDescriptor.confirmUploaded(storagePath));
+        assertThrows(IllegalFileStatusChangeException.class, () -> fileDescriptor.confirmUploaded(storagePath));
     }
 
     @Test

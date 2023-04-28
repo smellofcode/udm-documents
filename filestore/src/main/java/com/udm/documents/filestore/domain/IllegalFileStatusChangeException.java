@@ -21,28 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.filestore.usecase;
+package com.udm.documents.filestore.domain;
 
-import com.udm.documents.filestore.domain.FileDescriptor;
-import com.udm.documents.filestore.domain.FileDescriptorView;
-import com.udm.documents.filestore.usecase.port.FindFileDescriptorPort;
-import java.util.Optional;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+public class IllegalFileStatusChangeException extends RuntimeException {
 
-@Service
-@AllArgsConstructor
-public class GetFileDescriptorUseCase {
-
-    private final FindFileDescriptorPort findFileDescriptorPort;
-
-    public Optional<FileDescriptorView> apply(GetFileDescriptorQuery query) {
-        return findFileDescriptorPort
-                .findById(query.id())
-                .filter(FileDescriptor::canBeDownloaded)
-                .map(FileDescriptorView::from);
+    public IllegalFileStatusChangeException(FileStatus source, FileStatus target) {
+        super("Illegal change from %s to %s".formatted(source.name(), target.name()));
     }
-
-    public record GetFileDescriptorQuery(UUID id) {}
 }

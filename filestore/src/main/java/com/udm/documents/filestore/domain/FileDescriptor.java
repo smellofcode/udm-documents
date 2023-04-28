@@ -50,7 +50,7 @@ public class FileDescriptor {
 
     public void confirmUploaded(String storagePath) {
         if (status != FileStatus.UPLOADING) {
-            throw new IllegalStateException();
+            throw new IllegalFileStatusChangeException(status, FileStatus.UPLOADED);
         }
         this.status = FileStatus.UPLOADED;
         this.storagePath = storagePath;
