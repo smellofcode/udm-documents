@@ -23,6 +23,8 @@ dependencies {
     implementation(project(":filestore:adapter:out:file"))
 
     implementation(project(":folders"))
+    implementation(project(":folders:adapter:in:web-mvc"))
+    implementation(project(":folders:adapter:out:db-jdbi"))
 
     //Spring boot bundles
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")

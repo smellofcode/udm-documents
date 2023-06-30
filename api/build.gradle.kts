@@ -7,6 +7,7 @@ plugins {
 
 tasks.jar {
     archiveFileName.set("api.jar")
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 dependencies {

@@ -23,13 +23,11 @@ SOFTWARE.
 */
 package com.udm.documents.folders.domain;
 
-import java.util.UUID;
+public class FolderNotCreatedException extends RuntimeException {
 
-public class FolderNotFoundException extends RuntimeException {
+    public static final String FOLDER_CANNOT_BE_CREATED = "Folder cannot be created.";
 
-    public static final String FOLDER_CANNOT_BE_FOUND = "Folder %s cannot be found.";
-
-    public FolderNotFoundException(UUID id) {
-        super(FOLDER_CANNOT_BE_FOUND.formatted(id.toString()));
+    public FolderNotCreatedException() {
+        super(FOLDER_CANNOT_BE_CREATED);
     }
 }

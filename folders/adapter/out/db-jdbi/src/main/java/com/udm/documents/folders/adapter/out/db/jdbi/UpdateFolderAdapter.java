@@ -21,15 +21,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.folders.domain;
+package com.udm.documents.folders.adapter.out.db.jdbi;
 
-import java.util.UUID;
+import com.udm.documents.folders.domain.Folder;
+import com.udm.documents.folders.usecase.port.UpdateFolderPort;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
-public class FolderNotFoundException extends RuntimeException {
+@Component
+@AllArgsConstructor
+class UpdateFolderAdapter implements UpdateFolderPort {
 
-    public static final String FOLDER_CANNOT_BE_FOUND = "Folder %s cannot be found.";
-
-    public FolderNotFoundException(UUID id) {
-        super(FOLDER_CANNOT_BE_FOUND.formatted(id.toString()));
-    }
+    @Override
+    public void update(final Folder folder) {}
 }

@@ -21,15 +21,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.folders.domain;
+package com.udm.documents.folders.adapter.out.db.jdbi;
 
+import com.udm.documents.folders.domain.Folder;
+import com.udm.documents.folders.usecase.port.GetFolderPort;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.mapper.reflect.ConstructorMapper;
+import org.springframework.stereotype.Component;
 
-public class FolderNotFoundException extends RuntimeException {
+@Component
+@AllArgsConstructor
+class GetFolderAdapter implements GetFolderPort {
 
-    public static final String FOLDER_CANNOT_BE_FOUND = "Folder %s cannot be found.";
+    private final Jdbi jdbi;
 
-    public FolderNotFoundException(UUID id) {
-        super(FOLDER_CANNOT_BE_FOUND.formatted(id.toString()));
+    @Override
+    public Optional<Folder> getById(final UUID id) {
+        return jdbi.withHandle(handle -> handle
+                .createQuery(
+                        """
+                        SELECT id, name, parentId
+                        FROM folder
+                        WHERE id=:id
+                        """)
+                .bind("id", id)
+                .registerRowMapper(ConstructorMapper.factory(Folder.class))
+                .mapTo(Folder.class)
+                .stream()
+                .findFirst());
     }
 }

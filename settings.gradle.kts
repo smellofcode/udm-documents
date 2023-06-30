@@ -7,6 +7,8 @@ include(":filestore:adapter:out:db-jdbi")
 include(":filestore:adapter:out:file")
 
 include(":folders")
+include(":folders:adapter:in:web-mvc")
+include(":folders:adapter:out:db-jdbi")
 
 // API
 include(":api")

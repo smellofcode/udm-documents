@@ -50,6 +50,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll()
                         .requestMatchers(
+                                "/folders/**",
                                 "/documents/**",
                                 "/actuator/**",
                                 "/v3/api-docs",
