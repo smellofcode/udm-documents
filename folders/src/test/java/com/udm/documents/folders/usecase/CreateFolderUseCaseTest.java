@@ -112,9 +112,9 @@ class CreateFolderUseCaseTest {
     @Test
     void shouldThrowException_whenCreatingFolder_andCalledWithInvalidParentId() {
         // given
-        String folderName = UUID.randomUUID().toString();
-        UUID invalidId = Folder.create(null).id();
-        CreateFolderCommand command = new CreateFolderCommand(folderName, invalidId);
+        var folderName = UUID.randomUUID().toString();
+        var invalidId = UUID.randomUUID();
+        var command = new CreateFolderCommand(folderName, invalidId);
 
         when(getFolderPort.getById(invalidId)).thenReturn(Optional.empty());
 
@@ -127,7 +127,7 @@ class CreateFolderUseCaseTest {
     }
 
     @Test
-    void shouldThrowException_whenCreatingFolder_andCreationsConflicts() {
+    void shouldThrowException_whenCreatingFolder_andCreationConflicts() {
         // given
         String folderName = UUID.randomUUID().toString();
         Folder parentFolder = Folder.create(null);

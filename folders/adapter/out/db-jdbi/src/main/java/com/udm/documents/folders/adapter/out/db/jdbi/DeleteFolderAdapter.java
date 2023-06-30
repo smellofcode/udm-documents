@@ -23,9 +23,8 @@ SOFTWARE.
 */
 package com.udm.documents.folders.adapter.out.db.jdbi;
 
-import com.udm.documents.folders.domain.Folder;
-import com.udm.documents.folders.domain.FolderNotCreatedException;
-import com.udm.documents.folders.usecase.port.CreateFolderPort;
+import com.udm.documents.folders.domain.FolderNotDeletedException;
+import com.udm.documents.folders.usecase.port.DeleteFolderPort;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,28 +34,26 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Slf4j
 @Component
-class CreateFolderAdapter implements CreateFolderPort {
+class DeleteFolderAdapter implements DeleteFolderPort {
 
     private final Jdbi jdbi;
 
     @Override
-    public UUID create(final Folder folder) {
+    public void delete(final UUID folderId) {
         jdbi.useTransaction(handle -> {
-            final var insertCount = handle.createUpdate(
+            final var deleteCount = handle.createUpdate(
                             """
-                                                  INSERT INTO folder (id, name, parentId)
-                                                  VALUES (:id, :name, :parentId)
-                                                  ON CONFLICT DO NOTHING
+                                                  DELETE FROM folder
+                                                  WHERE :id = id
                                                   """)
-                    .bindBean(folder)
+                    .bind("id", folderId)
                     .execute();
 
-            if (insertCount == 0) {
-                log.info("Failed to insert folder.");
-                throw new FolderNotCreatedException();
+            if (deleteCount == 0) {
+                log.info("Failed to delete folder with provided id=%s".formatted(folderId));
+                throw new FolderNotDeletedException(folderId);
             }
-            log.info("Inserted folder with id=%s.".formatted(folder.id()));
+            log.info("Deleted folder with id=%s".formatted(folderId));
         });
-        return folder.id();
     }
 }

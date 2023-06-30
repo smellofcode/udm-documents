@@ -27,7 +27,7 @@ import java.util.UUID;
 
 public class FolderNotFoundException extends RuntimeException {
 
-    public static final String FOLDER_CANNOT_BE_FOUND = "Folder %s cannot be found.";
+    public static final String FOLDER_CANNOT_BE_FOUND = "No folder with id=%s was found.";
 
     public FolderNotFoundException(UUID id) {
         super(FOLDER_CANNOT_BE_FOUND.formatted(id.toString()));

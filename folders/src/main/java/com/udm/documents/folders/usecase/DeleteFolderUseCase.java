@@ -23,4 +23,21 @@ SOFTWARE.
 */
 package com.udm.documents.folders.usecase;
 
-public class DeleteFolderUseCase {}
+import com.udm.documents.folders.usecase.port.DeleteFolderPort;
+import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import org.springframework.stereotype.Service;
+
+@AllArgsConstructor
+@Service
+public class DeleteFolderUseCase {
+
+    private final DeleteFolderPort deleteFolderPort;
+
+    public void apply(@NonNull DeleteFolderCommand command) {
+        deleteFolderPort.delete(command.folderId());
+    }
+
+    public record DeleteFolderCommand(UUID folderId) {}
+}

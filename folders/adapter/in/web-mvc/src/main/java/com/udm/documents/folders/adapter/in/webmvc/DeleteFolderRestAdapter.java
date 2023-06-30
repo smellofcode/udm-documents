@@ -21,30 +21,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.folders.usecase;
+package com.udm.documents.folders.adapter.in.webmvc;
 
-import com.udm.documents.folders.domain.FolderNotFoundException;
-import com.udm.documents.folders.usecase.port.GetFolderPort;
-import com.udm.documents.folders.usecase.port.UpdateFolderPort;
+import com.udm.documents.folders.domain.FolderNotDeletedException;
+import com.udm.documents.folders.usecase.DeleteFolderUseCase;
+import com.udm.documents.folders.usecase.DeleteFolderUseCase.DeleteFolderCommand;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @AllArgsConstructor
-@Service
-public class RenameFolderUseCase {
+class DeleteFolderRestAdapter {
 
-    private final GetFolderPort getFolderPort;
+    private final DeleteFolderUseCase useCase;
 
-    private final UpdateFolderPort updateFolderPort;
-
-    public void apply(@NonNull RenameFolderCommand command) {
-        var folder = getFolderPort
-                .getById(command.folderId())
-                .orElseThrow(() -> new FolderNotFoundException(command.folderId()));
-        updateFolderPort.update(folder.withNewName(command.newName()));
+    @DeleteMapping("/folders")
+    public ResponseEntity<String> deleteFolder(@RequestBody DeleteFolderRequestBody requestBody) {
+        var command = new DeleteFolderCommand(requestBody.folderId());
+        try {
+            useCase.apply(command);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (FolderNotDeletedException e) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
-    public record RenameFolderCommand(@NonNull UUID folderId, @NonNull String newName) {}
+    record DeleteFolderRequestBody(UUID folderId) {}
 }

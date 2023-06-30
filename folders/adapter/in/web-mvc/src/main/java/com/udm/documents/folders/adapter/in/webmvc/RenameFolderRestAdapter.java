@@ -21,40 +21,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.folders.adapter.out.db.jdbi;
+package com.udm.documents.folders.adapter.in.webmvc;
 
-import com.udm.documents.folders.domain.Folder;
 import com.udm.documents.folders.domain.FolderNotUpdatedException;
-import com.udm.documents.folders.usecase.port.UpdateFolderPort;
+import com.udm.documents.folders.usecase.RenameFolderUseCase;
+import com.udm.documents.folders.usecase.RenameFolderUseCase.RenameFolderCommand;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.jdbi.v3.core.Jdbi;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @AllArgsConstructor
-@Slf4j
-@Component
-class UpdateFolderAdapter implements UpdateFolderPort {
+class RenameFolderRestAdapter {
 
-    private final Jdbi jdbi;
+    private final RenameFolderUseCase useCase;
 
-    @Override
-    public void update(final Folder folder) {
-        jdbi.useTransaction(handle -> {
-            final var updateCount = handle.createUpdate(
-                            """
-                                                  UPDATE folder
-                                                  SET id = :id, name = :name, parentId = :parentId
-                                                  WHERE id = :id
-                                                  """)
-                    .bindBean(folder)
-                    .execute();
-
-            if (updateCount == 0) {
-                log.info("Failed to update folder.");
-                throw new FolderNotUpdatedException(folder.id());
-            }
-            log.info("Updated folder with id=%s.".formatted(folder.id()));
-        });
+    @PatchMapping("/folders/rename")
+    public ResponseEntity<String> renameFolder(@RequestBody RenameFolderRequestBody requestBody) {
+        var command = new RenameFolderCommand(requestBody.folderId(), requestBody.newName());
+        try {
+            useCase.apply(command);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (FolderNotUpdatedException e) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
+
+    record RenameFolderRequestBody(UUID folderId, String newName) {}
 }

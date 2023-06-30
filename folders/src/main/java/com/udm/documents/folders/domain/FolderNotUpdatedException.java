@@ -21,30 +21,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package com.udm.documents.folders.usecase;
+package com.udm.documents.folders.domain;
 
-import com.udm.documents.folders.domain.FolderNotFoundException;
-import com.udm.documents.folders.usecase.port.GetFolderPort;
-import com.udm.documents.folders.usecase.port.UpdateFolderPort;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
-@Service
-public class RenameFolderUseCase {
+public class FolderNotUpdatedException extends RuntimeException {
 
-    private final GetFolderPort getFolderPort;
+    public static final String FOLDER_NOT_UPDATED = "No folder with id=%s was updated.";
 
-    private final UpdateFolderPort updateFolderPort;
-
-    public void apply(@NonNull RenameFolderCommand command) {
-        var folder = getFolderPort
-                .getById(command.folderId())
-                .orElseThrow(() -> new FolderNotFoundException(command.folderId()));
-        updateFolderPort.update(folder.withNewName(command.newName()));
+    public FolderNotUpdatedException(UUID folderId) {
+        super(FOLDER_NOT_UPDATED.formatted(folderId));
     }
-
-    public record RenameFolderCommand(@NonNull UUID folderId, @NonNull String newName) {}
 }
