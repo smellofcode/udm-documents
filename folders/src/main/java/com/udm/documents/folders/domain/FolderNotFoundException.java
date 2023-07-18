@@ -24,12 +24,29 @@ SOFTWARE.
 package com.udm.documents.folders.domain;
 
 import java.util.UUID;
+import lombok.Getter;
 
 public class FolderNotFoundException extends RuntimeException {
 
     public static final String FOLDER_CANNOT_BE_FOUND = "No folder with id=%s was found.";
 
+    public static final String FOLDER_TYPE_CANNOT_BE_FOUND = "No %s folder with id=%s was found.";
+
+    @Getter
+    public enum Type {
+        PARENT("parent");
+        public final String string;
+
+        Type(String string) {
+            this.string = string;
+        }
+    }
+
     public FolderNotFoundException(UUID id) {
         super(FOLDER_CANNOT_BE_FOUND.formatted(id.toString()));
+    }
+
+    public FolderNotFoundException(UUID id, Type type) {
+        super(FOLDER_TYPE_CANNOT_BE_FOUND.formatted(type.getString(), id.toString()));
     }
 }

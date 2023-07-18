@@ -44,10 +44,10 @@ class UpdateFolderAdapter implements UpdateFolderPort {
             final var updateCount = handle.createUpdate(
                             """
                                                   UPDATE folder
-                                                  SET id = :id, name = :name, parentId = :parentId
+                                                  SET id = :id, name = :name, parent_id = :parentId
                                                   WHERE id = :id
                                                   """)
-                    .bindBean(folder)
+                    .bindMethods(folder)
                     .execute();
 
             if (updateCount == 0) {

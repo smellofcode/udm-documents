@@ -44,11 +44,11 @@ class CreateFolderAdapter implements CreateFolderPort {
         jdbi.useTransaction(handle -> {
             final var insertCount = handle.createUpdate(
                             """
-                                                  INSERT INTO folder (id, name, parentId)
+                                                  INSERT INTO folder (id, name, parent_id)
                                                   VALUES (:id, :name, :parentId)
                                                   ON CONFLICT DO NOTHING
                                                   """)
-                    .bindBean(folder)
+                    .bindMethods(folder)
                     .execute();
 
             if (insertCount == 0) {

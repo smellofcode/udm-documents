@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create folder metadata table
+      author: Maciej Małecki
+      changes:
+        - createTable:
+            tableName: folder
+            schemaName: ${db-schema-name}
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: parent_id
+                  type: uuid
+      rollback:
+        - sql:
+            sql: drop table folder;

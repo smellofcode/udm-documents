@@ -43,7 +43,7 @@ class GetFolderAdapter implements GetFolderPort {
         return jdbi.withHandle(handle -> handle
                 .createQuery(
                         """
-                        SELECT id, name, parentId
+                        SELECT id, name, parent_id
                         FROM folder
                         WHERE id=:id
                         """)

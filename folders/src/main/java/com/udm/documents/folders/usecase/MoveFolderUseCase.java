@@ -23,6 +23,8 @@ SOFTWARE.
 */
 package com.udm.documents.folders.usecase;
 
+import static com.udm.documents.folders.domain.FolderNotFoundException.*;
+
 import com.udm.documents.folders.domain.FolderNotFoundException;
 import com.udm.documents.folders.usecase.port.GetFolderPort;
 import com.udm.documents.folders.usecase.port.UpdateFolderPort;
@@ -41,6 +43,14 @@ public class MoveFolderUseCase {
     public void apply(MoveFolderCommand command) {
         final var folder =
                 getFolderPort.getById(command.id()).orElseThrow(() -> new FolderNotFoundException(command.id()));
+
+        final var parent = getFolderPort
+                .getById(command.newParentId)
+                .orElseThrow(() -> new FolderNotFoundException(command.newParentId(), Type.PARENT));
+
+        final var folderWithNewParent = folder.withNewParent(parent.id());
+
+        updateFolderPort.update(folderWithNewParent);
     }
 
     public record MoveFolderCommand(UUID id, UUID newParentId) {}
